@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syed Anas - Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: #00ffcc;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            text-decoration: none;
+            background-color: #00ffcc;
+            color: #111;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            background-color: #007a52;
+        }
+
+        .neon-underline {
+            position: relative;
+            display: inline-block;
+        }
+
+        .neon-underline::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background-color: #00ffcc;
+            bottom: 0;
+            left: 0;
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .neon-underline:hover::before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Syed Anas</h1>
+        <p>I am an Information Technology undergrad passionate about web development.</p>
+        <a href="projects.html" class="btn">View Portfolio</a>
+        <div class="neon-underline">
+            <p>Scroll down to explore</p>
+        </div>
+    </div>
+    <!-- Add the following inside the body tag of your HTML -->
+
+<div class="social-links">
+    <a href="https://www.linkedin.com/in/syed-anas-1aa11a1ab" target="_blank" rel="noopener noreferrer">
+        <img src="linkedin.png" alt="LinkedIn">
+    </a>
+    <a href="https://www.instagram.com/anassyed118/" target="_blank" rel="noopener noreferrer">
+        <img src="instagram.png" alt="Instagram">
+    </a>
+    <a href="https://github.com/anassyed2912" target="_blank" rel="noopener noreferrer">
+        <img src="/Users/hasnain/Desktop/my webpage/github-mark-white.png" alt="github">
+    </a>
+</div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Add your custom JavaScript here
+        });
+    </script>
+</body>
+</html>
