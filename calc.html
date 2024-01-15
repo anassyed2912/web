@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CALCULATOR</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.4/math.js"
+        integrity="sha512-BbVEDjbqdN3Eow8+empLMrJlxXRj5nEitiCAK5A1pUr66+jLVejo3PmjIaucRnjlB0P9R3rBUs3g5jXc8ti+fQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- for styling -->
+    <style>
+        body {
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #calcu {
+            border: 5px solid #ecf0f1;
+            border-radius: 15px;
+            background-color: #34495e;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="button"] {
+            width: 45px;
+            height: 45px;
+            margin: 5px;
+            background-color: #e74c3c;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="button"]:hover {
+            background-color: #c0392b;
+            transform: scale(1.1);
+            transition: transform 0.2s ease;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            background-color: #2c3e50;
+            color: white;
+            text-align: right;
+        }
+
+    </style>
+</head>
+
+<!-- create table -->
+
+<body>
+    <div id="calcu">
+        <input type="text" id="result">
+        <br>
+        <!-- clr() function will call clr to clear all value -->
+        <input type="button" value="C" onclick="clr()" />
+        <input type="button" value="/" onclick="dis('/')" />
+        <input type="button" value="*" onclick="dis('*')" />
+        <br>
+        <!-- create button and assign value to each button -->
+        <!-- dis("1") will call function dis to display value -->
+        <input type="button" value="1" onclick="dis('1')" />
+        <input type="button" value="2" onclick="dis('2')" />
+        <input type="button" value="3" onclick="dis('3')" />
+        <input type="button" value="-" onclick="dis('-')" />
+        <br>
+        <input type="button" value="4" onclick="dis('4')" />
+        <input type="button" value="5" onclick="dis('5')" />
+        <input type="button" value="6" onclick="dis('6')" />
+        <input type="button" value="+" onclick="dis('+')" />
+        <br>
+        <input type="button" value="7" onclick="dis('7')" />
+        <input type="button" value="8" onclick="dis('8')" />
+        <input type="button" value="9" onclick="dis('9')" />
+        <br>
+        <input type="button" value="0" onclick="dis('0')" />
+        <input type="button" value="." onclick="dis('.')" />
+        <!-- solve function call function solve to evaluate value -->
+        <input type="button" value="=" onclick="solve()" />
+    </div>
+
+    <script>
+        // Function that display value
+        function dis(val) {
+            document.getElementById("result").value += val
+        }
+
+        var cal = document.getElementById("calcu");
+        cal.onkeyup = function (event) {
+            if (event.keyCode === 13) {
+                console.log("Enter");
+                let x = document.getElementById("result").value
+                console.log(x);
+                solve();
+            }
+        }
+
+        // Function that evaluates the digit and return result
+        function solve() {
+            let x = document.getElementById("result").value
+            let y = math.evaluate(x)
+            document.getElementById("result").value = y
+        }
+
+        // Function that clear the display
+        function clr() {
+            document.getElementById("result").value = ""
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Player Soccer Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(to bottom, #5C995C, #306230); /* Green gradient background */
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+        }
+
+        canvas {
+            border: 2px solid white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            background: #6D9B6D; /* Lighter green canvas background */
+        }
+
+        /* Add some style to the scores */
+        #scores {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="soccerGameCanvas" width="800" height="400"></canvas>
+    <div id="scores"></div>
+
+    <script>
+        const canvas = document.getElementById('soccerGameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Players
+        const striker1 = {
+            x: canvas.width / 4 - 20,
+            y: canvas.height / 2 - 20,
+            width: 40,
+            height: 40,
+            color: '#00F',
+            speed: 30
+        };
+
+        const striker2 = {
+            x: (3 * canvas.width) / 4 - 20,
+            y: canvas.height / 2 - 20,
+            width: 40,
+            height: 40,
+            color: '#F00',
+            speed: 30
+        };
+
+        // Ball
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 10,
+            speedX: 5,
+            speedY: 3,
+            color: '#000'
+        };
+
+        // Goal posts
+        const goalPost1 = {
+            x: 0,
+            y: canvas.height / 2 - 40,
+            width: 10,
+            height: 80,
+            color: '#000'
+        };
+
+        const goalPost2 = {
+            x: canvas.width - 10,
+            y: canvas.height / 2 - 40,
+            width: 10,
+            height: 80,
+            color: '#000'
+        };
+
+        // Scores
+        let scoreStriker1 = 0;
+        let scoreStriker2 = 0;
+
+        // Function to draw a striker
+        function drawStriker(striker) {
+            ctx.fillStyle = striker.color;
+            ctx.fillRect(striker.x, striker.y, striker.width, striker.height);
+        }
+
+        // Function to draw the ball
+        function drawBall() {
+            ctx.fillStyle = ball.color;
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Function to draw a goal post
+        function drawGoalPost(post) {
+            ctx.fillStyle = post.color;
+            ctx.fillRect(post.x, post.y, post.width, post.height);
+        }
+
+        // Function to handle keyboard input for striker 1
+        function handleInputStriker1(event) {
+            switch (event.key) {
+                case 'w':
+                    striker1.y -= striker1.speed;
+                    break;
+                case 's':
+                    striker1.y += striker1.speed;
+                    break;
+                case 'a':
+                    striker1.x -= striker1.speed;
+                    break;
+                case 'd':
+                    striker1.x += striker1.speed;
+                    break;
+            }
+        }
+
+        // Function to handle keyboard input for striker 2
+        function handleInputStriker2(event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    striker2.y -= striker2.speed;
+                    break;
+                case 'ArrowDown':
+                    striker2.y += striker2.speed;
+                    break;
+                case 'ArrowLeft':
+                    striker2.x -= striker2.speed;
+                    break;
+                case 'ArrowRight':
+                    striker2.x += striker2.speed;
+                    break;
+            }
+        }
+
+        // Update function
+        
+        function update() {
+            // Move the ball
+            ball.x += ball.speedX;
+            ball.y += ball.speedY;
+
+            // Bounce the ball off the walls
+            if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+                ball.speedX = -ball.speedX;
+            }
+
+            if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+                ball.speedY = -ball.speedY;
+            }
+
+            // Bounce the ball off striker 1
+            if (
+                ball.x - ball.radius < striker1.x + striker1.width &&
+                ball.x + ball.radius > striker1.x &&
+                ball.y - ball.radius < striker1.y + striker1.height &&
+                ball.y + ball.radius > striker1.y
+            ) {
+                ball.speedX = -ball.speedX;
+                ball.speedY = -ball.speedY;
+            }
+
+            // Bounce the ball off striker 2
+            if (
+                ball.x - ball.radius < striker2.x + striker2.width &&
+                ball.x + ball.radius > striker2.x &&
+                ball.y - ball.radius < striker2.y + striker2.height &&
+                ball.y + ball.radius > striker2.y
+            ) {
+                ball.speedX = -ball.speedX;
+                ball.speedY = -ball.speedY;
+            }
+
+            // Check for goal scoring by striker 1
+            if (ball.x - ball.radius < goalPost1.x + goalPost1.width && ball.y > goalPost1.y && ball.y < goalPost1.y + goalPost1.height) {
+                scoreStriker2++;
+                resetGame();
+            }
+
+            // Check for goal scoring by striker 2
+            if (ball.x + ball.radius > goalPost2.x && ball.y > goalPost2.y && ball.y < goalPost2.y + goalPost2.height) {
+                scoreStriker1++;
+                resetGame();
+            }
+        }
+
+        // Function to reset the game state
+        function resetGame() {
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+        }
+
+        // Render function
+        function render() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the strikers, ball, goal posts, and scores
+            drawStriker(striker1);
+            drawStriker(striker2);
+            drawBall();
+            drawGoalPost(goalPost1);
+            drawGoalPost(goalPost2);
+
+            // Function to draw the center circle
+            function drawCenterCircle() {
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2, canvas.height / 2, 50, 0, Math.PI * 2);
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.closePath();
+            }
+            // Function to draw a penalty area (D-shape)
+function drawPenaltyArea(x, y) {
+    ctx.beginPath();
+    ctx.rect(x, y - 30, 120, 60);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.closePath();
+}
+
+// Call this function in the render function after drawing the players, ball, goal posts, and center circle
+drawPenaltyArea(0, canvas.height / 2);
+drawPenaltyArea(canvas.width - 120, canvas.height / 2);
+
+
+// Call this function in the render function after drawing the players, ball, and goal posts
+drawCenterCircle();
+
+
+            // Display scores
+            ctx.font = '20px Arial';
+            ctx.fillStyle = '#000';
+            ctx.fillText(`Player 1: ${scoreStriker1} - Player 2: ${scoreStriker2}`, canvas.width / 2 - 80, 30);
+        }
+
+        // Game loop
+        function gameLoop() {
+            update();
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Event listeners for keyboard input
+        window.addEventListener('keydown', handleInputStriker1);
+        window.addEventListener('keydown', handleInputStriker2);
+
+        // Start the game loop
+        gameLoop();
+    </script>
+</body>
+</html>
